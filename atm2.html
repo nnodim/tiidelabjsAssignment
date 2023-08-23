@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .atm-container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+    }
+
+    button {
+        padding: 8px 16px;
+        cursor: pointer;
+    }
+
+    .result {
+        margin-top: 20px;
+    }
+</style>
+
+<body>
+    <div class="atm-container">
+        <h1>Welcome to the ATM!</h1>
+        <form id="atm-form">
+            <label for="pin">Enter PIN:</label>
+            <input type="password" id="pin" />
+            <button type="submit">Enter</button>
+        </form>
+        <div class="result" id="result"></div>
+    </div>
+    <script>
+        const form = document.getElementById('atm-form');
+        const resultDiv = document.getElementById('result');
+
+        const balance = 100000;
+        const userPin = 1234;
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const pinInput = document.getElementById('pin');
+            const enteredPin = parseInt(pinInput.value);
+
+            if (enteredPin === userPin) {
+                let choice = prompt(`Select an operation:
+        1. Withdraw
+        2. Transfer
+        3. Check Balance
+        4. Exit`);
+
+                while (choice !== "4") {
+                    if (choice === "1") {
+                        let amount = parseInt(prompt("Enter the amount to Withdraw:"));
+                        if (amount > 0 && amount <= balance) {
+                            alert("Please take your money!");
+                            balance -= amount;
+                        } else if (amount > balance) {
+                            alert("Insufficient balance!");
+                        } else {
+                            alert("Amount must be greater than 0!");
+                        }
+                    } else if (choice === "2") {
+                        let accNo = prompt("Enter recipient ACC number:");
+                        let bank = prompt(`
+                Choose bank:
+                1. First Bank
+                2. Ecobank
+                `);
+                        if (bank === "1") {
+                            let amount = parseInt(prompt("Enter the amount to Transfer:"));
+                            if (amount > 0 && amount <= balance) {
+                                alert("Transfer successful!");
+                                balance -= amount;
+                            } else if (amount > balance) {
+                                alert("Insufficient balance!");
+                            } else {
+                                alert("Amount must be greater than 0!");
+                            }
+                        } else if (bank === "2") {
+                            alert('Account not found!');
+                        }
+                    } else if (choice === "3") {
+                        alert(`Balance: $${balance}`);
+                    } else {
+                        alert("Invalid choice!");
+                    }
+
+                    choice = prompt(`Select an operation:
+            1. Withdraw
+            2. Transfer
+            3. Check Balance
+            4. Exit`);
+                }
+
+                resultDiv.innerHTML = `Thank you for using the ATM.`;
+            } else {
+                resultDiv.innerHTML = `Invalid PIN!`;
+            }
+
+            // Clear the PIN input field
+            pinInput.value = '';
+        });
+
+    </script>
+</body>
+
+</html>

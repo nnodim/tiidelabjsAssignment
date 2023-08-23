@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UBA ATM</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome to UBA ATM</h1>
+        <button onclick="startTransaction()">Start</button>
+        <div id="output"></div>
+    </div>
+    <script>
+        let balance = 100000;
+        let userPin = 1234;
+        const output = document.getElementById("output");
+
+        function startTransaction() {
+            const code = prompt('Dial *919# to begin');
+            if (code === "*919#") {
+                let choice;
+                do {
+                    choice = prompt(`
+                        Welcome to UBA!
+                        What do you want to do today:
+                        1. Airtime
+                        2. Transfer
+                        3. Check balance
+                        4. Loan
+                        Type 'exit' to exit
+                    `);
+                    if (choice === "1") {
+                        airtimeTransaction();
+                    } else if (choice === "2") {
+                        transferTransaction();
+                    } else if (choice === "3") {
+                        checkBalance();
+                    } else if (choice === "4") {
+                        alert('Loan not available!');
+                    } else if (choice !== "exit") {
+                        alert('Invalid choice!');
+                    }
+                } while (choice !== "exit");
+            } else {
+                alert("Invalid code!");
+            }
+        }
+
+        function airtimeTransaction() {
+            let option;
+            do {
+                option = prompt(`
+                    Select an operation:
+                    1. Recharge Self
+                    2. Recharge Others
+                    Type 'back' to go back
+                `);
+                if (option === "1") {
+                    rechargeSelf();
+                } else if (option === "2") {
+                    rechargeOthers();
+                } else if (option !== "back") {
+                    alert('Invalid option!');
+                }
+            } while (option !== "back");
+        }
+
+        function rechargeSelf() {
+            const amount = parseInt(prompt("Enter the amount to recharge:"));
+            const pin = parseInt(prompt('Enter your PIN:'));
+            if (pin === userPin) {
+                processTransaction(amount);
+            } else {
+                alert("Invalid PIN!");
+            }
+        }
+
+        function rechargeOthers() {
+            prompt('Enter recipient number:');
+            const amount = parseInt(prompt("Enter the amount to recharge:"));
+            const pin = parseInt(prompt('Enter your PIN:'));
+            if (pin === userPin) {
+                processTransaction(amount);
+            } else {
+                alert("Invalid PIN!");
+            }
+        }
+
+        function transferTransaction() {
+            const accNo = prompt("Enter recipient ACC number:");
+            const bank = prompt(`
+                Choose bank:
+                1. First Bank
+                2. Ecobank
+            `);
+            if (bank === "1") {
+                const amount = parseInt(prompt("Enter the amount to Transfer:"));
+                const pin = parseInt(prompt('Enter your PIN:'));
+                if (pin === userPin) {
+                    processTransaction(amount);
+                } else {
+                    alert("Invalid PIN!");
+                }
+            } else if (bank === "2") {
+                alert('Account not found!');
+            }
+        }
+
+        function checkBalance() {
+            const pin = parseInt(prompt('Enter your PIN:'));
+            if (pin === userPin) {
+                output.textContent = `Balance: $${balance}`;
+            } else {
+                alert("Invalid PIN!");
+            }
+        }
+
+        function processTransaction(amount) {
+            if (amount > 0 && amount <= balance) {
+                alert("Transaction successful!");
+                balance -= amount;
+                output.textContent = `Balance: $${balance}`;
+            } else if (amount > balance) {
+                alert("Insufficient balance!");
+            } else {
+                alert("Amount must be greater than 0!");
+            }
+        }
+    </script>
+</body>
+
+</html>
